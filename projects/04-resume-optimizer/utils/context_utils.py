@@ -13,7 +13,7 @@ def extract_job_terms_tfidf(job_description, resume_text, top_k = 40):
     job = _norm(job_description)
     resume = _norm(resume_text)
 
-    vec = TfidfVectorizer(stop_words = 'english',ngram_range = (1, 3),min_df = 1,max_df = 0.95)
+    vec = TfidfVectorizer(stop_words = 'english', ngram_range = (1, 3), min_df = 1, max_df = 0.95)
 
     X = vec.fit_transform([job, resume])
     terms = vec.get_feature_names_out()

@@ -82,7 +82,8 @@ Optimization goals:
 A. Add missing role keywords that are compatible with the segment content.
 B. Clarify ownership and scope using existing facts.
 C. Improve readability and ATS matching without changing meaning.
-D. If the job description mentions specific tools or practices, include them only if the segment already implies them. If not implied, do not add them.
+D. If the job description mentions specific tools or practices, include them only if the segment already implies them. If not implied, do not add them. Example: If resume mentions 'cloud', and context mentions 'Azure', feel free to use 'Azure' in rewritten segment.
+E. Sometimes, but not always, add a measurable, quantifiable impact, e. g. 'enhanced by 40%', 'reduced by 3x' and etc., if context allows and it feels logical to do so. Remember that '%' is a special symbol in latex.
 
 Safe keyword enrichment rules:
 You may add general terms that do not create new facts, such as:
@@ -112,7 +113,7 @@ Guidance:
 3. Add job aligned keywords only when truthful and compatible with the original.
 4. Prefer concrete phrasing over generic wording.
 5. Do not change a text if it's only 1 or 2 words. Only change full sentences.
-6. Always end sentences with a dot.
+6. Always end sentences with a dot if original sentence contained it. If original sentence did not end with a dot, do not use it.
 
 Example input:
 {
