@@ -9,19 +9,28 @@ def _norm(s):
     return s
 
 @staticmethod
-def extract_job_terms_tfidf(job_description, resume_text, top_k = 40):
+def extract_job_terms_tfidf(job_description, resume_text, top_k = 40, bonus_job_only = 0.25):
     job = _norm(job_description)
     resume = _norm(resume_text)
 
-    vec = TfidfVectorizer(stop_words = 'english', ngram_range = (1, 3), min_df = 1, max_df = 0.95)
+    vec = TfidfVectorizer(stop_words = 'english', ngram_range = (1, 3), min_df = 1, max_df = 1.0)
 
     X = vec.fit_transform([job, resume])
     terms = vec.get_feature_names_out()
 
     job_scores = X[0].toarray().ravel()
+    resume_scores = X[1].toarray().ravel()
 
-    idx = np.argsort(job_scores)[::-1]
-    ranked = [terms[i] for i in idx if job_scores[i] > 0.0]
+    in_job = job_scores > 0.0
+    in_resume = resume_scores > 0.0
+
+    job_only = in_job & (~in_resume)
+
+    boosted = job_scores.copy()
+    boosted[job_only] = boosted[job_only] + bonus_job_only
+
+    idx = np.argsort(boosted)[::-1]
+    ranked = [terms[i] for i in idx if in_job[i]]
 
     return ranked[:top_k]
 
@@ -49,8 +58,8 @@ def build_context(present, missing, max_present = 15, max_missing = 20):
 
     parts = []
     if present:
-        parts.append('Keywords already in resume. You can use them freely: ' + ', '.join(present) + '.')
+        parts.append('Keywords in both job and resume. You can use them freely: ' + ', '.join(present) + '.')
     if missing:
-        parts.append('Keywords from job not found in resume, add only if applicable: ' + ', '.join(missing) + '.')
+        parts.append('Keywords in job but not found in resume, add only if applicable: ' + ', '.join(missing) + '.')
 
     return '\n'.join(parts)
